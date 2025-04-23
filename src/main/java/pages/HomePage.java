@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -22,18 +23,20 @@ import org.testng.Assert;
 public class HomePage {
 	WebDriver driver;
 	JavascriptExecutor js;
-	
+	Actions actions;
+Dimension dimension;
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		js = (JavascriptExecutor) driver;
+		actions = new Actions(driver);
+
 	}
+
 	@FindBy(xpath = "//a[text()='Login' and @class='nav-link']")
-	
-	
+
 	WebElement logInFromHeader;
-	
-	
+
 	@FindBy(xpath = "//input[@id='emails']")
 	WebElement email;
 	@FindBy(xpath = "//input[@id='password']")
@@ -79,7 +82,7 @@ public class HomePage {
 	@FindBy(xpath = "//input[@name='home_address_line_1']")
 	WebElement home_address_line_1;
 	@FindBy(xpath = "//input[@id='id_home_address_line_2']")
-	WebElement  home_address_line_2;
+	WebElement home_address_line_2;
 	@FindBy(xpath = "//input[@name='city']")
 	WebElement city;
 	@FindBy(xpath = "//select[@name='state']")
@@ -102,7 +105,7 @@ public class HomePage {
 	WebElement primary_language;
 	@FindBy(xpath = "//div[text()='Bengali']")
 	WebElement bengali;
-	
+
 	@FindBy(xpath = "//input[@id='id_sign_by_name']")
 	WebElement sign_by_name;
 	@FindBy(xpath = "//input[@id='is_agree']")
@@ -115,7 +118,7 @@ public class HomePage {
 	WebElement RightClickAction;
 	@FindBy(xpath = "//li[text()='Back']")
 	WebElement back;
-	
+
 	@FindBy(xpath = "//h3[text()='Select your course from the dropdown']")
 	WebElement header;
 	@FindBy(xpath = "//h5[text()='Please enter your personal and contact information.']")
@@ -124,14 +127,14 @@ public class HomePage {
 	WebElement otherHeader;
 	@FindBy(xpath = "//a[text()='Terms and condition']")
 	WebElement terms_and_condition;
-	@FindBy (xpath = "//button[@id='acceptButton']")
+	@FindBy(xpath = "//button[@id='acceptButton']")
 	WebElement acceptButton;
 	@FindBy(xpath = "//button[normalize-space(text())='Others']")
 	WebElement othersButton;
-	@FindBy (xpath = "//button[@id='formButton2']")
+	@FindBy(xpath = "//button[@id='formButton2']")
 	WebElement HiddenButton;
-	////h5[text()='DataTable Example']
-	@FindBy (xpath = "//h5[contains(text(),'DataTable Example')]")
+	//// h5[text()='DataTable Example']
+	@FindBy(xpath = "//h5[contains(text(),'DataTable Example')]")
 	WebElement DataTableExample;
 
 	public void clickLogInFromHeader() {
@@ -140,9 +143,9 @@ public class HomePage {
 
 	public void navegate_to_logIn_page_and_click_enrollNowButton() throws InterruptedException {
 		Thread.sleep(3000);
-		email.sendKeys("tasnimchowdhury.qa@gmail.com",Keys.TAB);
+		email.sendKeys("tasnimchowdhury.qa@gmail.com", Keys.TAB);
 		Thread.sleep(3000);
-		userName.sendKeys("Darimee2010",Keys.TAB);
+		userName.sendKeys("Darimee2010", Keys.TAB);
 		Thread.sleep(3000);
 		driver.findElement(By.xpath("//button[contains(text(),'Login')]")).click();
 		// loginButton.click();
@@ -157,22 +160,21 @@ public class HomePage {
 		String child = (String) windowHandles.toArray()[1];
 		driver.switchTo().window(child);
 		System.out.println(windowHandles);
-		fName.sendKeys("Tasnim",Keys.TAB);
-		mName.sendKeys("Qurashy",Keys.TAB);
+		fName.sendKeys("Tasnim", Keys.TAB);
+		mName.sendKeys("Qurashy", Keys.TAB);
 		Thread.sleep(3000);
-		lName.sendKeys("Chowdhury",Keys.ENTER);
+		lName.sendKeys("Chowdhury", Keys.ENTER);
 		Thread.sleep(3000);
 	}
-	
 
 	public void navigate_to_enrollNow_page_and_fillUp_the_hole_page() throws InterruptedException {
 		Thread.sleep(3000);
 		driver.navigate().to("https://enthrallit.com/course/dashboard/enrolls/");
 		Thread.sleep(4000);
-		fName.sendKeys("Tasnim",Keys.TAB);
+		fName.sendKeys("Tasnim", Keys.TAB);
 		mName.sendKeys("");
 		Thread.sleep(3000);
-		lName.sendKeys("Chowdhury",Keys.TAB);
+		lName.sendKeys("Chowdhury", Keys.TAB);
 		Thread.sleep(3000);
 		Select select = new Select(iAm);
 		select.selectByVisibleText("a Student");
@@ -239,12 +241,26 @@ public class HomePage {
 		Thread.sleep(3000);
 		sign_by_name.sendKeys("Tasnim Chowdhury");
 		Thread.sleep(3000);
-		Actions dC = new Actions(driver);
-		dC.doubleClick(TermsAndConditions).build().perform();
+		// Actions dC = new Actions(driver);
+		actions.doubleClick(TermsAndConditions).build().perform();
 		Thread.sleep(7000);
 		acceptButton.click();
-		
-	
+
+	}
+
+	public void double_click_action() throws InterruptedException {
+		Thread.sleep(3000);
+		driver.get("https://demo.guru99.com/test/simple_context_menu.html");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		WebElement dcButton = driver.findElement(By.xpath("//button[contains(text(),'Double-Click Me To See Alert')]"));
+		actions.doubleClick(dcButton).build().perform();
+		Thread.sleep(3000);
+		Alert alert = driver.switchTo().alert();
+		System.out.println(alert.getText());
+		alert.accept();
+		// alert.dismiss();
+
 	}
 
 	public void placeHolder_maxlength_of_enrollNow_page() throws InterruptedException {
@@ -316,7 +332,6 @@ public class HomePage {
 		String expectedSubHeader = "Please enter your personal and contact information.";
 		Assert.assertEquals(actualSubHeader, expectedSubHeader, "actual and expected is not match");
 		System.out.println(actualSubHeader);
-		
 
 		String actualOtherHeader = otherHeader.getText();
 		String expectedOtherHeader = "All fields are required unless marked (optional).";
@@ -328,7 +343,7 @@ public class HomePage {
 		Thread.sleep(3000);
 		driver.navigate().to("https://enthrallit.com/course/dashboard/enrolls/");
 		Thread.sleep(4000);
-		
+
 		// One by one will come automatically
 		// iAMList.add(TermsAndConditions);
 		Select select_iam = new Select(iAm);
@@ -337,7 +352,7 @@ public class HomePage {
 			select_iam.selectByIndex(i);
 			Thread.sleep(2000);
 		}
-		
+
 		Select select_birthMonth = new Select(birthMonth);
 		for (int i = 1; i < birthMonthList.size(); i++) {
 			select_birthMonth.selectByIndex(i);
@@ -377,9 +392,8 @@ public class HomePage {
 		Alert alert = driver.switchTo().alert();
 		Thread.sleep(4000);
 		System.out.println(alert.getText());
-		alert.accept();//OK click
-		
-		
+		alert.accept();// OK click
+
 	}
 
 	public void doubleClick_alertClass() throws InterruptedException {
@@ -389,61 +403,238 @@ public class HomePage {
 		Actions dC = new Actions(driver);
 		dC.doubleClick(TermsAndConditions).build().perform();
 		Thread.sleep(7000);
-		acceptButton.click();//this is not right
+		acceptButton.click();// this is not right
 		Alert alert = driver.switchTo().alert();
 		Thread.sleep(4000);
-		alert.accept();//OK click
-		alert.getText();
-		//alert.dismiss();
+		alert.accept();// OK click
+		System.out.println(alert.getText());
+		// alert.dismiss();
 	}
-	//when we find Element Enterception Exception then we have do 
-	//JavascriptExecutor for Click
-	//"Element not Interacted Exception"  or "click intercepted Exception" for Hidden Element
-	//we will get "Style=display: none/block;" in the HTML document
+
+	// when we find Element Enterception Exception then we have do
+	// JavascriptExecutor for Click
+	// "Element not Interacted Exception" or "click intercepted Exception" for
+	// Hidden Element
+	// we will get "Style=display: none/block;" in the HTML document
 	public void navegate_to_logIn_page_and_click_othersButton_clickHiddenElement() throws InterruptedException {
 		Thread.sleep(3000);
-		
-		email.sendKeys("tasnimchowdhury.qa@gmail.com",Keys.TAB);
+
+		email.sendKeys("tasnimchowdhury.qa@gmail.com", Keys.TAB);
 		Thread.sleep(3000);
-		userName.sendKeys("Darimee2010",Keys.TAB);
+		userName.sendKeys("Darimee2010", Keys.TAB);
 		Thread.sleep(3000);
 		driver.findElement(By.xpath("//button[contains(text(),'Login')]")).click();
 		// loginButton.click();
 		Thread.sleep(3000);
 		automation.click();
 		Thread.sleep(3000);
-othersButton.click();
-Thread.sleep(5000);
-JavascriptExecutor js= (JavascriptExecutor)driver;
-js.executeScript("arguments[0].click()", HiddenButton);
-HiddenButton.click();//not working
-JavascriptExecutor js01 =(JavascriptExecutor) driver;
+		othersButton.click();
+		Thread.sleep(5000);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click()", HiddenButton);
+		HiddenButton.click();// not working
+		JavascriptExecutor js01 = (JavascriptExecutor) driver;
 //Actions action = new Actions(driver);
 //action.keyDown(Keys.CONTROL).sendKeys(Keys.END).build().perform();
-}
-	public void webDriverWait_use_for_webElement() {
-		//"Element not visible Exception" When an element is not found (Explicitly wait)
-		//"No such Element Exception" for all WebElement (implicitly wait)
-		
-		WebDriverWait wait =new WebDriverWait(driver, Duration.ofMillis(3000));
-		//By forgerPassword =By.xpath("//a[text()='Forgot Password?']");
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Forgot Password?']"))).click();
-		//wait .until(ExpectedConditions.elementToBeClickable(By.xpath(""))).click();
-		
-		
-	//	boolean displayed = wait.until(ExpectedConditions.visibilityOf(loginButton)).isDisplayed();
-		//System.out.println(displayed);
 	}
+
+	public void webDriverWait_use_for_webElement() {
+		// "Element not visible Exception" When an element is not found (Explicitly
+		// wait)
+		// "No such Element Exception" for all WebElement (implicitly wait)
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(3000));
+		// By forgerPassword =By.xpath("//a[text()='Forgot Password?']");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Forgot Password?']"))).click();
+		// wait .until(ExpectedConditions.elementToBeClickable(By.xpath(""))).click();
+
+		// boolean displayed =
+		// wait.until(ExpectedConditions.visibilityOf(loginButton)).isDisplayed();
+		// System.out.println(displayed);
+	}
+
 	public void hidden_element_address02() throws InterruptedException {
 		Thread.sleep(3000);
 		driver.navigate().to("https://enthrallit.com/course/dashboard/enrolls/");
 		Thread.sleep(4000);
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(3000));
 		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
-		home_address_line_1.sendKeys("ABC",Keys.TAB);
+		home_address_line_1.sendKeys("ABC", Keys.TAB);
 		Thread.sleep(4000);
-		JavascriptExecutor js = (JavascriptExecutor)driver;
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].value='abc'", home_address_line_2);
 	}
-	
+
+	public void dregAndDrop_action() throws InterruptedException {
+		Thread.sleep(3000);
+		driver.get("https://demo.guru99.com/test/drag_drop.html");
+		Thread.sleep(4000);
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(3000));
+		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
+		WebElement sourceLocator = driver.findElement(By.xpath("//a[contains(text(),' BANK ')]"));
+		WebElement targetLocator = driver.findElement(By.xpath("//ol[contains(@id,'bank')]"));
+		actions.dragAndDrop(sourceLocator, targetLocator).build().perform();
+		Thread.sleep(4000);
+
+	}
+
+	public void slider_action() throws InterruptedException {
+		Thread.sleep(3000);
+		driver.get("https://demoqa.com/slider/");
+		Thread.sleep(4000);
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(3000));
+		driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000));
+		WebElement slide = driver.findElement(By.cssSelector("input.range-slider.range-slider--primary"));
+		actions.dragAndDropBy(slide, 25, 50).build().perform();
+		Thread.sleep(7000);
+		actions.dragAndDropBy(slide, 50, 5).build().perform();
+
+	}
+
+	public void read_table() throws InterruptedException {
+		Thread.sleep(3000);
+		// driver.get("https://www.amazon.com/");
+		driver.get("https://enthrallit.com/selenium/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(3000);
+		// WebElement table = driver.findElement(By.tagName("table"));
+		WebElement table = driver.findElement(By.cssSelector("table.table.table-striped.table-bordered.table-sm "));
+		System.out.println(table.getText());
+		// Amazon.com
+		// WebElement table =
+		// driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon"));
+		// System.out.println(table.getText());
+	}
+
+	// How to read the row of a Table
+	public void read_any_row_of_the_table() throws InterruptedException {
+		Thread.sleep(3000);
+		// driver.get("https://www.amazon.com");
+		driver.get("https://enthrallit.com/selenium/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(3000);
+		actions = new Actions(driver);
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		Thread.sleep(3000);
+		// WebElement row =
+		// driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon
+		// tr:nth-child(1)"));
+		WebElement row = driver
+				.findElement(By.cssSelector("table.table.table-striped.table-bordered.table-sm tr:nth-child(1)"));
+		System.out.println(row.getText());
+		Thread.sleep(3000);
+	}
+
+	// How to read any cell of a row of the Table
+	public void read_any_cell_of_a_row_of_the_table() throws InterruptedException {
+		Thread.sleep(3000);
+		// driver.get("https://www.amazon.com");
+		driver.get("https://enthrallit.com/selenium/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(3000);
+		// actions = new Actions(driver);
+		actions.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
+		Thread.sleep(3000);
+		// WebElement cell =
+		// driver.findElement(By.cssSelector("table.navFooterMoreOnAmazon
+		// tr:nth-child(1) td:nth-child(7)"));
+		WebElement cell = driver.findElement(
+				By.cssSelector("table.table.table-striped.table-bordered.table-sm tr:nth-child(1) td:nth-child(7)"));
+
+		System.out.println(cell.getText());
+		Thread.sleep(3000);
+	}// regarding TestNG
+		// use of groups
+
+	public void get_methods_of_the_page_03() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: " + actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");
+	}
+
+	public void get_methods_of_the_page_04() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: " + actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");
+	}
+
+	public void get_methods_of_the_page_05() {
+		String actual = driver.getTitle();
+		System.out.println("Title name: " + actual);
+		String expected = "CMS Enterprise Portal";
+		Assert.assertEquals(actual, expected, "Home Page Title doesn't match ....... ");
+	}
+
+	public void use_of_expectedExceptions01() {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will fail");
+		int i = 1 / 0;
+	}
+
+	public void use_of_expectedExceptions02() {
+		System.out.println("We can verify whether a code throws the expected exception or not. Here it will Pass");
+		int i = 1 / 0;
+	}
+
+	public void use_of_expectedExceptions03() throws InterruptedException {
+		driver.get("https://portal.cms.gov/portal/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(3000);
+		driver.findElement(By.id("xxs-login-submit")).click(); // cms login button
+
+	}               
+
+	// for test dependOnMethod()
+	public void new_user_registration_button_enabled() throws InterruptedException {
+		driver.get("https://portal.cms.gov/portal/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(3000);
+		WebElement nur = driver.findElement(By.xpath("//a[contains(text(), 'New User Registration')]"));
+		boolean buttonEnabled = nur.isEnabled();
+		System.out.println("Is the Button Enabled? Ans: " + buttonEnabled);
+		Assert.assertTrue(true, "The New User Registration Button is disable .....");
+	}
+
+	public void new_user_registration_button_click() throws InterruptedException {
+		driver.get("https://portal.cms.gov/portal/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//a[contains(text(), 'New User Registration')]")).click();
+		Thread.sleep(5000);
+		System.out.println(driver.getCurrentUrl());
+		System.out.println(driver.getTitle());
+	}
+	public void set_a_specific_size_for_window() throws InterruptedException {
+		Thread.sleep(3000);
+		// Will get the size of cms window, get size is different for different computer
+		System.out.println("The size of the CMS screen is: "+ driver.manage().window().getSize());
+		dimension = new Dimension(1000, 700); // (int width, int height)
+		driver.manage().window().setSize(dimension);
+		Thread.sleep(3000);
+		System.out.println("The set size for the CMS screen is: " + driver.manage().window().getSize());
+		
+		// Extra not related to this method, although you can skip
+		Thread.sleep(3000);
+		driver.navigate().to("https://www.cvs.com");
+		Thread.sleep(3000);
+		System.out.println("The set size for the CVS screen is: "+ driver.manage().window().getSize());
+		driver.manage().window().maximize();
+		Thread.sleep(3000);
+		System.out.println("The set size for the CVS maximize screen is: "+ driver.manage().window().getSize());
+		Thread.sleep(3000);
+		driver.manage().window().setSize(dimension); // just to show again the set size
+		Thread.sleep(3000);
+		System.out.println("The set size for the CVS screen is: "+ driver.manage().window().getSize());
+		Thread.sleep(3000);
+		driver.manage().window().fullscreen();
+		Thread.sleep(3000);
+		System.out.println("The set size for the CVS full screen is: "+ driver.manage().window().getSize());	
+	}
 }
