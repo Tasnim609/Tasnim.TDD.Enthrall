@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -16,6 +17,9 @@ public class BaseClass {
 	public void setUp() {
 		//System.setProperty("webdriver.chropme.driver", "C:\\Users\\HP 15t-dy100\\eclipse-workspace\\com.Enthrall\\driver\\chromedriver.exe");
 		System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
+		//ChromeOptions option=new ChromeOptions();
+		//option.addArguments("--headless=new");
+		//driver =new ChromeDriver(option);//Should not show the UI
 		driver =new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
